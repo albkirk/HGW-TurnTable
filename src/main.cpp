@@ -21,9 +21,9 @@
 
 #include <mywifi.h>
 
-#ifdef ESP8266
-    #include <httpupd.h>
-#endif
+//#ifdef ESP8266
+//    #include <httpupd.h>
+//#endif
 
 #include <telnet.h>
 #include <ntp.h>
@@ -66,9 +66,9 @@ void setup() {
       wifi_setup();
     
   // Check for HTTP Upgrade
-#ifdef ESP8266
-      http_upg();               // Note: this service kills all running UDP and TCP services
-#endif
+//#ifdef ESP8266
+//      http_upg();               // Note: this service kills all running UDP and TCP services
+//#endif
   // Start TELNET service
       if (config.TELNET) telnet_setup();
 
@@ -104,6 +104,9 @@ void loop() {
 
   // WiFi handling
       wifi_loop();
+
+  // Serial handling
+      serial_loop();
 
   // TELNET handling
       if (config.TELNET) telnet_loop();

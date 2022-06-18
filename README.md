@@ -1,12 +1,9 @@
-# ESP32 Project "Kick Start" Template
+# HGW TurnTable - ESP32 Based project
 
 
-This is a personal project to create a starting point for all my ESP projects.
-It is written in C++ under PlatformIO IDE (integrated on ATOM or Visual Studio Code platforms).
-I'm coding my own variant of this popular project, with some inspiration and lessons (code Snippets) from some well know projects like:
+In this project it is created a turnatable to rotate the Fixed Network Homegateway from 0Âº to 360Âº on Z axis, in steps of 30Âº to execute Wi-Fi throuput perform tests. This movment is triggered remotely via cable medium Ethernet or Serial in order to not disturb the 2.4GHz band.
 
-- ESPURNA: [GitHub Espurna Page](https://github.com/SensorsIot/Espurna-Framework)
-- TASMOTA: [GitHub Tasmota Page](https://github.com/arendst/Sonoff-Tasmota)
+
 
 ## Supported Features:
 	1. Project should run locally, even when LAN (WiFi) newtork is down (it seems obvious, but ...)
@@ -28,8 +25,8 @@ I'm coding my own variant of this popular project, with some inspiration and les
 
 ## --Dependencies--
 You must install the following libraries (under arduino or Platformio)
-	1. **ArduinoJson** by Benoit Blanchon 
-	2. **PubSubClient** by Nick O'Leary 
+	1. **ArduinoJson**ï¿½byï¿½Benoit Blanchon 
+	2. **PubSubClient**ï¿½byï¿½Nick O'Leary 
 
 ## Future features!!
 	1. WiFi "Air" sniffing for APs, Registered Stations and "Unregistered" Stations (It kinda works....)

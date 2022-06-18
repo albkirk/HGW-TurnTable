@@ -32,8 +32,8 @@ void on_message(const char* topic, byte* payload, unsigned int msg_length) {
     String command = String(topic);
     command.replace(mqtt_pathsubs, "");
     String cmd_value = String((char*)msg);
-    telnet_print("Requested Command: " + command);
-    telnet_println("\tCommand Value: " + cmd_value);
+    telnet_print("Requested Command: " + command, true);
+    telnet_println("\tCommand Value: " + cmd_value, true);
 
     // System Configuration 
     if ( command == "DeviceName") {hassio_delete(); strcpy(config.DeviceName, cmd_value.c_str()); hassio_discovery(); hassio_attributes(); storage_write(); }
@@ -112,13 +112,13 @@ void on_message(const char* topic, byte* payload, unsigned int msg_length) {
 
     custom_mqtt(command, cmd_value);
 
-    if (config.DEBUG) {
-        storage_print();
-        if (BattPowered) { Serial.printf("Power: BATT  -  Level: %.0f\t", getBattLevel()); }
-        else { Serial.printf("Power: MAINS\t"); }
-        Serial.print("Current Date/Time: " + curDateTime());
-        Serial.printf("\t NTP Sync: %d\n", NTP_Sync);
-    }
+//    if (config.DEBUG) {
+//        storage_print();
+//        if (BattPowered) { Serial.printf("Power: BATT  -  Level: %.0f\t", getBattLevel()); }
+//        else { Serial.printf("Power: MAINS\t"); }
+//        Serial.print("Current Date/Time: " + curDateTime());
+//        Serial.printf("\t NTP Sync: %d\n", NTP_Sync);
+//    }
 }
 
 
@@ -169,7 +169,7 @@ void mqtt_loop() {
     if (!MQTTclient.loop()) {
         if ( millis() - MQTT_LastTime > (MQTT_Retry * 1000)) {
             MQTT_errors ++;
-            Serial.println( "in loop function MQTT ERROR! #: " + String(MQTT_errors) + "  ==> " + MQTT_state_string(MQTTclient.state()) );
+            if (config.DEBUG) Serial.println( "in loop function MQTT ERROR! #: " + String(MQTT_errors) + "  ==> " + MQTT_state_string(MQTTclient.state()) );
             MQTT_LastTime = millis();
             mqtt_connect();
             if( MQTT_state == MQTT_CONNECTED) state_update();
@@ -195,7 +195,7 @@ void parse_command_msg(String bufferRead) {
                 char * pch;
                 pch = strtok (msg_array," ,-=\"\t\r\n");
                 String command = String((char *)pch);
-                pch = strtok (NULL, " ,-=\"\t\r\n");
+                pch = strtok (NULL, " ,=\"\t\r\n");
                 String value = String((char *)pch);
                 //Serial.print(command); Serial.print("\t<-->\t"); Serial.println(value);
 
@@ -249,7 +249,16 @@ void telnet_loop() {
         }
 
         if (telnetClient.available()) parse_command_msg(telnetClient.readStringUntil('\n'));
+        if (Serial.available()) parse_command_msg(Serial.readStringUntil('\n'));
 
         yield();
     }
+}
+
+
+// Serial loop function to parse anny command written on the serial interface
+void serial_loop() {
+        if (Serial.available()) parse_command_msg(Serial.readStringUntil('\n'));
+
+        yield();
 }

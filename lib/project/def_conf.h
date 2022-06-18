@@ -2,20 +2,20 @@
 //#define ESP32                                         // already defined elsewhere...
 //#define ESP8266                                       // already defined somewhere...
 //#define ESP8285                                         // ESP8285 chip requires reduced MEM space (ex.: remove WEB page)  
-#undef ESP8266                                          // To make sure it is not used somewhere... 
-//#undef ESP32                                            // To make sure it is not used somewhere... 
+//#undef ESP8266                                          // To make sure it is not used somewhere... 
+#undef ESP32                                            // To make sure it is not used somewhere... 
 
 // -- HARWARE & SOFTWARE Version --
 #define BRANDName           "AlBros_Team"               // Hardware brand name
-#define MODELName           "GenBoxESP"                 // Hardware model name
-#define SWVer               "12.19"                     // Major.Minor Software version (use String 01.00 - 99.99 format !)
+#define MODELName           "TurnTable"                 // Hardware model name
+#define SWVer               "01.01"                     // Major.Minor Software version (use String 01.00 - 99.99 format !)
 
 // -- GPIO to Function Assignment --
 #define LED_ESP              2                          // 8266=2, ESP32=22, T-Call=13, -1 means NOT used!
 #define BUZZER              -1                          // (Active) Buzzer pin. Suggest to use pin 0. -1 means NOT used!
 #define Ext1WakeUP          -1                          // External Wake Up pin. (connected to GND, with Parallel Cap).  -1 means NOT used!
 #define Def_Config          -1                          // Return to Default configuration. -1 means NOT used! 
-#define BUT_A               -1                          // Button A INPUT pin (used in buttons.h)
+#define BUT_A               13                          // Button A INPUT pin (used in buttons.h)
 #define BUT_B               -1                          // Button B INPUT pin (used in buttons.h)
 #define BUT_C               -1                          // Button C INPUT pin (used in buttons.h)
 #define T_Left              -1                          // Touch button Left  pin. -1 means NOT used! 
@@ -25,9 +25,10 @@
 //TouchPins[] = { 04, 00, 02, 15, 13, 12, 14, 27, 33, 32 };  // ALL TOUCH PIN available!
 
 // -- Power Source & Battery Level --
-bool BattPowered =          true;                       // Is the device battery powered?
+bool BattPowered =          false;                       // Is the device battery powered?
 #define Batt_L_Thrs         15                          // Battery level threshold [0%-100%] (before slepping forever).
 #define Using_ADC           true                        // will this device use the ADC? (if not, ES8266 will measure the internal voltage)
+//#define Default_ADC_PIN   34                          // IO pin to be used for the Battery ADC measurement. Default already is pin 36
 
 // -- SPI PIN Definition --
 #define MISO_PIN            -1                          // SPI MISO pin,TTGoTS->-1, -1 means NOT used!
@@ -71,20 +72,20 @@ bool BattPowered =          true;                       // Is the device battery
 void config_defaults() {
     Serial.println("Setting config Default values");
 
-    strcpy(config.DeviceName, "ESP_Generic");             // Device Name
+    strcpy(config.DeviceName, "TurnTable");               // Device Name
     strcpy(config.Location, "MainRoom");                  // Device Location
     strcpy(config.ClientID, "001001");                    // Client ID (used on MQTT)
     config.ONTime = 10;                                   // 0-255 seconds (Byte range)
     config.SLEEPTime = 0;                                 // 0-255 minutes (Byte range)
-    config.DEEPSLEEP = true;                              // 0 - Disabled, 1 - Enabled
+    config.DEEPSLEEP = false;                             // 0 - Disabled, 1 - Enabled
     config.LED = true;                                    // 0 - OFF, 1 - ON
-    config.TELNET = true;                                 // 0 - Disabled, 1 - Enabled
+    config.TELNET = false;                                // 0 - Disabled, 1 - Enabled
     config.OTA = true;                                    // 0 - Disabled, 1 - Enabled
-    config.WEB = true;                                    // 0 - Disabled, 1 - Enabled
+    config.WEB = false;                                   // 0 - Disabled, 1 - Enabled
     config.Remote_Allow = true;                           // 0 - Not Allow, 1 - Allow remote operation
-    config.STAMode = true;                                // 0 - AP or AP+STA Mode, 1 - Station only Mode
-    config.APMode = true;                                 // 0 - AP Mode Disabled, 1 - AP Mode Enabled
-    strcpy(config.SSID, "WiFiCasaN");                     // Wireless LAN SSID (STA mode)
+    config.STAMode = false;                               // 0 - AP or AP+STA Mode, 1 - Station only Mode
+    config.APMode = false;                                // 0 - AP Mode Disabled, 1 - AP Mode Enabled
+    strcpy(config.SSID, "WiFiNetwork");                   // Wireless LAN SSID (STA mode)
     strcpy(config.WiFiKey, "12345678");                   // Wireless LAN Key (STA mode)
     config.DHCP = true;                                   // 0 - Static IP, 1 - DHCP
     config.IP[0] = 192; config.IP[1] = 168; config.IP[2] = 1; config.IP[3] = 10;
@@ -98,12 +99,12 @@ void config_defaults() {
     strcpy(config.MQTT_Server, "iothubna.hopto.org");     // MQTT Broker Server (URL or IP)
     config.MQTT_Port = 1883;                              // MQTT Broker TCP port
     config.MQTT_Secure = false;                           // 0 - Unsecure, 1 - TLS v1.2 Secured!!
-    strcpy(config.MQTT_User, "admin");                    // MQTT Broker username
-    strcpy(config.MQTT_Password, "admin");                // MQTT Broker password
-    strcpy(config.UPDATE_Server, "iothubna.hopto.org");   // UPDATE Server (URL or IP)
+    strcpy(config.MQTT_User, "mqttuser");                 // MQTT Broker username
+    strcpy(config.MQTT_Password, "password!");            // MQTT Broker password
+    strcpy(config.UPDATE_Server, "mqtt.server.com");      // UPDATE Server (URL or IP)
     config.UPDATE_Port = 8123;                            // UPDATE Server TCP port
-    strcpy(config.UPDATE_User, "user");                   // UPDATE Server username
-    strcpy(config.UPDATE_Password, "1q2w3e4r");           // UPDATE Server password
+    strcpy(config.UPDATE_User, "updateuser");             // UPDATE Server username
+    strcpy(config.UPDATE_Password, "password");           // UPDATE Server password
     strcpy(config.SIMCardPIN, "1234");                    // SIM card PIN
     strcpy(config.APN, "internet.vodafone.pt");           // Modem (GPRS/NB-IoT) APN name 
     strcpy(config.MODEM_User, "none");                    // APN username
@@ -112,7 +113,7 @@ void config_defaults() {
     strcpy(config.WEB_Password, "admin");                 // WEB Server password
     config.Temp_Corr = 0.0;                               // Sensor Temperature Correction Factor, typically due to electronic self heat.
     config.LDO_Corr = 0.25;                               // Battery Voltage [volt] corrective Factor due to LDO/Diode voltage drop
-    config.HW_Module = true;                              // Is HW module plugged (ex.: GPS hardware)used / connected?
+    config.HW_Module = false;                             // Is HW module plugged (ex.: GPS hardware)used / connected?
     config.HASSIO_CFG = false;                            // Is HASSIO configured? If not, it should perform the discovery.
     config.DEBUG = true;                                  // 0 - No serial msgs, 1 - Debug msg sent to serial interface
     config.SW_Upgraded = false;                           // Is SW Upgrade completed? If not, clean the house and Update status.
@@ -128,4 +129,7 @@ void config_defaults() {
     config.Volume = 100;                                  // Speaker volume [0-100%].
     config.Alarm_State = false;                           // Alarm state (true -> Ring / False -> Not Ring)
     config.AlarmDateTime = {0, 1, 0, 0, 0, 0, 7};         // Alarm DateTime structure
+    config.Velocity = 512;                                // Steppet Velocuty [1 - 2048]
+    config.MINAngle = -185;                               // Turntable Minimum angle
+    config.MAXAngle = 174;                                // Turntable Maximum angle
 }

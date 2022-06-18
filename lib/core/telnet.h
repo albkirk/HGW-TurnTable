@@ -10,8 +10,8 @@ WiFiServer telnetServer(23);
 WiFiClient telnetClient;
 WiFiClient newClient;
 
-void telnet_print(String msg) {
-		if (config.DEBUG) Serial.print(msg);
+void telnet_print(String msg, bool Forced = false) {
+		if (config.DEBUG || Forced) Serial.print(msg);
 		if (config.TELNET && telnetClient && telnetClient.connected()) {  // send data to Client
 				if (bufferPrint == "") {
 						bufferPrint=msg;
@@ -25,8 +25,8 @@ void telnet_print(String msg) {
 }
 
 
-void telnet_println(String msg) {
-		if (config.DEBUG) Serial.println(msg);
+void telnet_println(String msg, bool Forced = false) {
+		if (config.DEBUG || Forced) Serial.println(msg);
 		if (config.TELNET && telnetClient && telnetClient.connected()) {  // send data to Client
 				if (bufferPrint == "") {
                         bufferPrint=msg;
