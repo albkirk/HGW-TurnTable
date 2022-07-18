@@ -7,8 +7,8 @@
 
 // -- HARWARE & SOFTWARE Version --
 #define BRANDName           "AlBros_Team"               // Hardware brand name
-#define MODELName           "TurnTable"                 // Hardware model name
-#define SWVer               "01.01"                     // Major.Minor Software version (use String 01.00 - 99.99 format !)
+#define MODELName           "Turntable"                 // Hardware model name
+#define SWVer               "01.07"                     // Major.Minor Software version (use String 01.00 - 99.99 format !)
 
 // -- GPIO to Function Assignment --
 #define LED_ESP              2                          // 8266=2, ESP32=22, T-Call=13, -1 means NOT used!
@@ -115,7 +115,7 @@ void config_defaults() {
     config.LDO_Corr = 0.25;                               // Battery Voltage [volt] corrective Factor due to LDO/Diode voltage drop
     config.HW_Module = false;                             // Is HW module plugged (ex.: GPS hardware)used / connected?
     config.HASSIO_CFG = false;                            // Is HASSIO configured? If not, it should perform the discovery.
-    config.DEBUG = true;                                  // 0 - No serial msgs, 1 - Debug msg sent to serial interface
+    config.DEBUG = false;                                 // 0 - No serial msgs, 1 - Debug msg sent to serial interface
     config.SW_Upgraded = false;                           // Is SW Upgrade completed? If not, clean the house and Update status.
     config.SWITCH_Default = false;                        // 0 - OFF, 1 - ON - Default SWITCH Status 
     config.UPPER_LEVEL = 70;                              // level where blinds should stay when pressing double UP

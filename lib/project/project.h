@@ -3,11 +3,13 @@
 // taken from https://randomnerdtutorials.com/esp8266-nodemcu-stepper-motor-28byj-48-uln2003/
 #include <AccelStepper.h>
 
-const int StepsPerRevolution = 4096;  // change this to fit the number of steps per revolution
-const int RevolutionsPerTurn = 7;     // change this to fit the number of revolutions per Plate turn
-int Angle = 0;
+const int StepsPerRevolution = 4096;        // change this to fit the number of steps per revolution
+const int RevolutionsPerTurn = 7;           // change this to fit the number of revolutions per Plate turn
+float MAXVelocity = 1024;                   // Max Velocuty value supported
+int Angle = 0;                              // Turntable position measured in angle
 int LastAngle = 0;
 bool Moving = false;
+const unsigned long ZeroTimeOut = 60000;    // Timeout to return to Angle Zero  
 
 // IR Sensor Pin
 #define IR_Out 13
@@ -40,19 +42,21 @@ void MoveTo() {
 }
 
 void ReturnToZero() {
+    unsigned long last_zerotime = millis();
   telnet_println("ReturnToZero A_Satus: " + String(A_STATUS));
   if (A_STATUS)
-      while (A_STATUS) {
+      while (A_STATUS && millis() - last_zerotime < ZeroTimeOut) {
           stepper.setSpeed(-config.Velocity);
           stepper.run();
           yield();
       }
   else 
-      while (!A_STATUS) {
+      while (!A_STATUS && millis() - last_zerotime < ZeroTimeOut) {
           stepper.setSpeed(config.Velocity);
           stepper.run();
           yield();
       }
+  if (millis() - last_zerotime >= ZeroTimeOut)  telnet_println("Return To Zero TimeOut!", true);
   stepper.disableOutputs();
   stepper.setCurrentPosition(0);
   Angle = 0;
@@ -86,7 +90,9 @@ void project_loop() {
         else {
             stepper.disableOutputs();
             Moving = false;
+            telnet_println("Mechanical movement done.", true);
             print_angle();
+            console_prompt();
         }
     }
     

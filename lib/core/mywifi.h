@@ -116,7 +116,10 @@ void wifi_connect() {
 
 
 void wifi_setup() {
-    if (!config.APMode && !config.STAMode) WIFI_state = WL_RADIO_OFF;
+    if (!config.APMode && !config.STAMode) {
+        WIFI_state = WL_RADIO_OFF;
+        wifi_disconnect();
+    }
     else {
         WIFI_state = WL_DISCONNECTED;
         wifi_connect();

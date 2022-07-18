@@ -25,7 +25,7 @@
 //    #include <httpupd.h>
 //#endif
 
-#include <telnet.h>
+#include <console.h>
 #include <ntp.h>
 #include <mqtt.h>
 #ifndef ESP8285
@@ -47,6 +47,7 @@ void setup() {
   // Start Serial interface
       //Serial.begin(74880);                  // This odd baud speed will shows ESP8266 boot diagnostics too.
       Serial.begin(115200);                 // For faster communication use 115200
+      //Serial.setTimeout(1000);
 
       Serial.println("");
       Serial.println("Hello World!");
@@ -88,6 +89,9 @@ void setup() {
 
   // **** Project SETUP Sketch code here...
       project_setup();
+
+  // all setup tasks done; time to prompt
+      console_prompt();
 
   // Last bit of code before leave setup
       ONTime_Offset = millis() + 200UL;     //  200ms after finishing the SETUP function it starts the "ONTime" countdown.

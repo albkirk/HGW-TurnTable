@@ -30,16 +30,16 @@ void A_pressed () {
           A_STATUS = true;
           if (NOW - Last_A < Butt_Interval) {
               A_COUNT += 1;
-              if (config.DEBUG) Serial.println("Button A pressed " + String(A_COUNT) + " times!");
+              telnet_println("Button A pressed " + String(A_COUNT) + " times!");
           }
           else {
               A_COUNT = 1;
-              if (config.DEBUG) Serial.println("Button A pressed");
+              telnet_println("Button A pressed");
           };
       }
       else {
           A_STATUS = false;
-          if (config.DEBUG) Serial.println("Button A released");
+          telnet_println("Button A released");
       };
   }
   Last_A = NOW;
@@ -55,16 +55,16 @@ void B_pressed () {
           B_STATUS = true;
           if (NOW - Last_B < Butt_Interval) {
               B_COUNT += 1;
-              if (config.DEBUG) Serial.println("Button B pressed " + String(B_COUNT) + " times!");
+              telnet_println("Button B pressed " + String(B_COUNT) + " times!");
           }
           else {
               B_COUNT = 1;
-              if (config.DEBUG) Serial.println("Button B pressed");
+              telnet_println("Button B pressed");
           };
       }
       else {
           B_STATUS = false;
-          if (config.DEBUG) Serial.println("Button B released");
+          telnet_println("Button B released");
       };
   }
   Last_B = NOW;
@@ -80,16 +80,16 @@ void C_pressed () {
           C_STATUS = true;
           if (NOW - Last_C < Butt_Interval) {
               C_COUNT += 1;
-              if (config.DEBUG) Serial.println("Button C pressed " + String(C_COUNT) + " times!");
+              telnet_println("Button C pressed " + String(C_COUNT) + " times!");
           }
           else {
               C_COUNT = 1;
-              if (config.DEBUG) Serial.println("Button C pressed");
+              telnet_println("Button C pressed");
           };
       }
       else {
           C_STATUS = false;
-          if (config.DEBUG) Serial.println("Button C released");
+          telnet_println("Button C released");
       };
   }
   Last_C = NOW;

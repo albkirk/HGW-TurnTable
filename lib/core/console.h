@@ -11,8 +11,9 @@ WiFiClient telnetClient;
 WiFiClient newClient;
 
 void telnet_print(String msg, bool Forced = false) {
-		if (config.DEBUG || Forced) Serial.print(msg);
-		if (config.TELNET && telnetClient && telnetClient.connected()) {  // send data to Client
+		if (config.DEBUG || Forced) {
+		    Serial.print(msg);
+			if (config.TELNET && telnetClient && telnetClient.connected()) {  // send data to Client
 				if (bufferPrint == "") {
 						bufferPrint=msg;
 						telnetClient.print(bufferPrint);
@@ -21,13 +22,15 @@ void telnet_print(String msg, bool Forced = false) {
 						delay(10);  // to avoid strange characters left in buffer
 				}
 				else if (config.DEBUG) Serial.println("Buffer not empty");
+			}
 		}
 }
 
 
 void telnet_println(String msg, bool Forced = false) {
-		if (config.DEBUG || Forced) Serial.println(msg);
-		if (config.TELNET && telnetClient && telnetClient.connected()) {  // send data to Client
+		if (config.DEBUG || Forced) {
+		    Serial.println(msg);
+			if (config.TELNET && telnetClient && telnetClient.connected()) {  // send data to Client
 				if (bufferPrint == "") {
                         bufferPrint=msg;
                         telnetClient.println(bufferPrint);
@@ -36,6 +39,7 @@ void telnet_println(String msg, bool Forced = false) {
                         delay(10);  // to avoid strange characters left in buffer
 				}
 				else if (config.DEBUG) Serial.println("Buffer not empty");
+			}
 		}
 }
 
@@ -43,7 +47,7 @@ void telnet_println(String msg, bool Forced = false) {
 void telnet_stop() {
     // Stop Client
     if (telnetClient && telnetClient.connected()) {
-		if (config.DEBUG) Serial.println("Telnet Service STOP.");
+		telnet_println("Telnet Service STOP.");
         telnetClient.stop();
     }
     // Stop server
@@ -58,9 +62,13 @@ void telnet_setup() {
 	   		//start Telnet service
 	   		telnetServer.begin();
 	   		telnetServer.setNoDelay(true);
-	   		if (config.DEBUG) Serial.println("Telnet Service READY.");
+	   		telnet_println("Telnet Service READY.", true);
 	   		bufferPrint.reserve(BUFFER_PRINT);
     	}
     	else telnet_stop();
 	}
+}
+
+void console_prompt() {
+	telnet_print( String(config.DeviceName) + String("> "), true);
 }
